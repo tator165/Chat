@@ -3,22 +3,28 @@ import java.util.UUID;
 public class MainService {
     public static void main(String[] args) {
         User user = new User();
-        user.registration();  // регистрируем
+        user.registration();
 
 
         UUID id = user.userRegInfo.iterator().next().getId();
+        UUID password = user.userRegInfo.iterator().next().getPassword();
+        String name = user.userRegInfo.iterator().next().getName();
 
+        login(user, name, password, id);
         getAllChats(user, id);
     }
 
-    public void login(String username, UUID password, UUID id){
-
-
+    public static void login(User user, String name, UUID password, UUID id){
+        for(UserInfo loginInfo : user.userRegInfo){
+            if(loginInfo.getId().equals(id) && loginInfo.getName().equals(name) && loginInfo.getPassword().equals(password)){
+                System.out.println("OK");
+            }
+        }
     }
 
     public static void getAllChats(User user, UUID userId){
-        for(UserInfo info : user.userRegInfo){
-            if(userId.equals(info.getId())){
+        for(UserInfo idInfo : user.userRegInfo){
+            if(userId.equals(idInfo.getId())){
                 System.out.println("OK");
             }
         }
