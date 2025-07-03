@@ -3,6 +3,7 @@ import java.util.UUID;
 public class MainService {
     public static void main(String[] args) {
         User user = new User();
+
         user.registration();
 
 
@@ -12,6 +13,12 @@ public class MainService {
 
         login(user, name, password, id);
         getAllChats(user, id);
+        UUID messageId = UUID.randomUUID();
+        UUID chatId = UUID.randomUUID();
+        DataService messageHandler = new DataService();
+
+        Message message = new Message("Hi", id, chatId, messageId);
+        messageHandler.sendMessage(message);
     }
 
     public static User login(User user, String name, UUID password, UUID id){
