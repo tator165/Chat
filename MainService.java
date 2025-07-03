@@ -14,19 +14,28 @@ public class MainService {
         getAllChats(user, id);
     }
 
-    public static void login(User user, String name, UUID password, UUID id){
-        for(UserInfo loginInfo : user.userRegInfo){
+    public static User login(User user, String name, UUID password, UUID id){
+        for(UserWrapper loginInfo : user.userRegInfo){
             if(loginInfo.getId().equals(id) && loginInfo.getName().equals(name) && loginInfo.getPassword().equals(password)){
+                System.out.println("OK");
+            }
+        }
+        return user;
+    }
+
+    public static void getAllChats(User user, UUID userId){
+        for(UserWrapper idInfo : user.userRegInfo){
+            if(userId.equals(idInfo.getId())){
                 System.out.println("OK");
             }
         }
     }
 
-    public static void getAllChats(User user, UUID userId){
-        for(UserInfo idInfo : user.userRegInfo){
-            if(userId.equals(idInfo.getId())){
-                System.out.println("OK");
-            }
-        }
+    public static void getAllMessages(UUID chatId){
+
+    }
+
+    public void addMessage(){
+
     }
 }

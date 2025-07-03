@@ -1,7 +1,7 @@
 import java.util.UUID;
 
 public class Chat {
-    UUID chatId;
+    private UUID chatId;
     UUID [] usersId;
 
     public void setChatId(UUID chatId) {

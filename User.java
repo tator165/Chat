@@ -1,4 +1,3 @@
-import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -6,7 +5,7 @@ import java.util.UUID;
 
 public class User {
     Scanner scan = new Scanner(System.in);
-    Set<UserInfo> userRegInfo = new HashSet<>();
+    Set<UserWrapper> userRegInfo = new HashSet<>();
 
     public void registration(){
         System.out.print("Enter name: ");
@@ -18,10 +17,10 @@ public class User {
         UUID id = UUID.randomUUID();
         System.out.println("Generated id: " + id);
 
-        userRegInfo.add(new UserInfo(name, password, id));
+        userRegInfo.add(new UserWrapper(name, password, id));
 
         System.out.println("User: ");
-        for (UserInfo info : userRegInfo){
+        for (UserWrapper info : userRegInfo){
             System.out.println(info);
         }
     }

@@ -1,11 +1,11 @@
 import java.util.UUID;
 
-public class UserInfo {
+public class UserWrapper {
     String name;
     UUID password;
     UUID id;
 
-    public UserInfo(String name, UUID password, UUID id) {
+    public UserWrapper(String name, UUID password, UUID id) {
         this.name = name;
         this.password = password;
         this.id = id;
