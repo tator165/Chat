@@ -1,11 +1,8 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class User {
     Scanner scan = new Scanner(System.in);
-    Set<UserWrapper> userRegInfo = new HashSet<>();
+    Set<UserWrapper> userRegInfo = new LinkedHashSet<>();
 
     public void registration(){
         System.out.print("Enter name: ");

@@ -38,7 +38,7 @@ public class Message {
         return senderId;
     }
 
-    public UUID setMessageId(){
+    public UUID generateMessageId(){
         return UUID.randomUUID();
     }
     public UUID getMessageId(){

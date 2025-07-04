@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.UUID;
 
 public class MainService {
@@ -11,14 +12,19 @@ public class MainService {
         UUID password = user.userRegInfo.iterator().next().getPassword();
         String name = user.userRegInfo.iterator().next().getName();
 
+        System.gc();
+
         login(user, name, password, id);
         getAllChats(user, id);
         UUID messageId = UUID.randomUUID();
         UUID chatId = UUID.randomUUID();
         DataService messageHandler = new DataService();
 
-        Message message = new Message("Hi", id, chatId, messageId);
+        Scanner scanner = new Scanner(System.in);
+        Message message = new Message(scanner.nextLine(), id, chatId, messageId);
         messageHandler.sendMessage(message);
+
+
     }
 
     public static User login(User user, String name, UUID password, UUID id){
