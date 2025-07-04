@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class MainService {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         User user = new User();
 
         user.registration();
@@ -11,7 +12,7 @@ public class MainService {
         UUID id = user.userRegInfo.iterator().next().getId();
         UUID password = user.userRegInfo.iterator().next().getPassword();
         String name = user.userRegInfo.iterator().next().getName();
-
+        Chat chat = new Chat();
         System.gc();
 
         login(user, name, password, id);
@@ -21,6 +22,11 @@ public class MainService {
         DataService messageHandler = new DataService();
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Create chat");
+        String answer = scanner.nextLine();
+        if (answer.equals("y")){
+            chat.generateChatId();
+        }
         Message message = new Message(scanner.nextLine(), id, chatId, messageId);
         messageHandler.sendMessage(message);
 
