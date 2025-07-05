@@ -6,20 +6,22 @@ import java.util.UUID;
 
 public class MainService {
     public static void main(String[] args) throws IOException {
-        User user1 = new User();
-        user1.loadUsersFromFile();
+
+
         Chat chat1 = new Chat();
 
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("log or reg?: ");
         if(scanner.nextLine().equals("log")){
+
             System.out.println("Enter name, password");
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
-            login(user1, name, passwordString);
+            login(name,passwordString);
+
         } else if(scanner.nextLine().equals("reg")){
-            user1.registration();
+            User.registration();
         }
 
 
@@ -52,7 +54,7 @@ public class MainService {
 
     }
 
-    public static User login(User user, String name, String passwordStr) {
+    public static User login(String name, String passwordStr) {
         UUID password;
         try {
             password = UUID.fromString(passwordStr.trim());
@@ -61,10 +63,10 @@ public class MainService {
             return null;
         }
 
-        for (UserWrapper loginInfo : user.userRegInfo) {
-            if (loginInfo.getName().equals(name) && loginInfo.getPassword().equals(password)) {
+        for (User u : User.userRegInfo) {
+            if (u.getName().equals(name) && u.getPassword().equals(password)) {
                 System.out.println("OK");
-                return user;
+                return new User(u.getName(), u.getPassword(), u.getId()); // Создаём нового пользователя
             }
         }
 
@@ -73,7 +75,7 @@ public class MainService {
     }
 
     public static void getAllChats(User user, UUID userId){
-        for(UserWrapper idInfo : user.userRegInfo){
+        for(User idInfo : user.userRegInfo){
             if(userId.equals(idInfo.getId())){
                 System.out.println("OK");
             }
@@ -95,5 +97,23 @@ public class MainService {
             throw new RuntimeException(e);
         }
         return messagesList;
+    }
+
+    public void loadUsersFromFile() {
+        try (Scanner fileScanner = new Scanner(new File("src\\Users.txt"))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine().trim();
+                if (!line.isEmpty()) {
+                    String[] parts = line.split(" ");
+                    if (parts.length == 3) {
+                        String name = parts[0];
+                        UUID password = UUID.fromString(parts[1]);
+                        UUID id = UUID.fromString(parts[2]);
+                        User.userRegInfo.add(new User(name, password, id));
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
     }
 }
