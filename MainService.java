@@ -7,8 +7,9 @@ import java.util.UUID;
 public class MainService {
     public static void main(String[] args) throws IOException {
 
+        User loggedInUser = null;
 
-        Chat chat1 = new Chat();
+
 
 
         Scanner scanner = new Scanner(System.in);
@@ -18,7 +19,8 @@ public class MainService {
             System.out.println("Enter name, password");
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
-            login(name,passwordString);
+            loadUsersFromFile();
+            loggedInUser = login(name,passwordString);
 
         } else if(scanner.nextLine().equals("reg")){
             User.registration();
@@ -31,10 +33,7 @@ public class MainService {
 //        String name = user1.userRegInfo.iterator().next().getName();;
 //        System.gc();
 
-//
-
-
-
+        Chat chat1 = new Chat();
         System.out.println("Create chat or use existing chat? ");
         String answer = scanner.nextLine();
         if (answer.equals("y")){
@@ -44,10 +43,12 @@ public class MainService {
             answer = scanner.nextLine();
             getAllMessages(answer);
         }
+        Message message = new Message("Hello", loggedInUser.getId(), UUID.fromString(answer), UUID.randomUUID());
+        DataService.sendMessage(message);
 
 
-        DataService messageHandler = new DataService();
-        UUID messageId = UUID.randomUUID();
+//        DataService messageHandler = new DataService();
+//        UUID messageId = UUID.randomUUID();
 //        Message message = new Message(scanner.nextLine(), id, chat1.getChatId(), messageId);
 //        messageHandler.sendMessage(message);
 
@@ -66,7 +67,7 @@ public class MainService {
         for (User u : User.userRegInfo) {
             if (u.getName().equals(name) && u.getPassword().equals(password)) {
                 System.out.println("OK");
-                return new User(u.getName(), u.getPassword(), u.getId()); // Создаём нового пользователя
+                return new User(u.getName(), u.getPassword(), u.getId());
             }
         }
 
@@ -99,7 +100,7 @@ public class MainService {
         return messagesList;
     }
 
-    public void loadUsersFromFile() {
+    public static void loadUsersFromFile() {
         try (Scanner fileScanner = new Scanner(new File("src\\Users.txt"))) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();

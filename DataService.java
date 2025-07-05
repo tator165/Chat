@@ -5,10 +5,10 @@ import java.util.*;
 
 public class DataService {
 
-    List<Message> messages = new ArrayList<>();
+    static List<Message> messages = new ArrayList<>();
 
 
-    public void sendMessage(Message message){
+    public static void sendMessage(Message message){
         messages.add(message);
         System.out.println(messages);
 

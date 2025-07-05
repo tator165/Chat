@@ -8,7 +8,9 @@ public class User {
     UUID userId;
 
     public User(String name, UUID password, UUID id){
-
+        this.userName = name;
+        this.userPassword = password;
+        this.userId = id;
     }
 
     public String getName() {
