@@ -1,16 +1,15 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class DataService {
 
-    Set<Message> messages = new LinkedHashSet<>();
+    List<Message> messages = new ArrayList<>();
+
 
     public void sendMessage(Message message){
-        messages.add(new Message(message.getTextMessage(), message.getSenderId(), message.getChatId(), message.getMessageId()));
+        messages.add(message);
         System.out.println(messages);
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ihor\\IdeaProjects\\Chats\\src\\Chats.txt", true))) {

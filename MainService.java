@@ -1,33 +1,42 @@
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class MainService {
     public static void main(String[] args) throws IOException {
-        User user = new User();
+        User user1 = new User();
+        Chat chat1 = new Chat();
+        user1.registration();
 
-        user.registration();
 
-
-        UUID id = user.userRegInfo.iterator().next().getId();
-        UUID password = user.userRegInfo.iterator().next().getPassword();
-        String name = user.userRegInfo.iterator().next().getName();
-        Chat chat = new Chat();
+        UUID id = user1.userRegInfo.iterator().next().getId();
+        UUID password = user1.userRegInfo.iterator().next().getPassword();
+        String name = user1.userRegInfo.iterator().next().getName();;
         System.gc();
 
-        login(user, name, password, id);
-        getAllChats(user, id);
-        UUID messageId = UUID.randomUUID();
-        UUID chatId = UUID.randomUUID();
-        DataService messageHandler = new DataService();
+        login(user1, name, password, id);
+
+
+
+
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Create chat");
+        System.out.println("Create chat or use existing chat? ");
         String answer = scanner.nextLine();
         if (answer.equals("y")){
-            chat.generateChatId();
+            chat1.generateChatId();
+        }else {
+            System.out.println("Enter chatId: ");
+            answer = scanner.nextLine();
+            getAllMessages(answer);
         }
-        Message message = new Message(scanner.nextLine(), id, chatId, messageId);
+
+
+        DataService messageHandler = new DataService();
+        UUID messageId = UUID.randomUUID();
+        Message message = new Message(scanner.nextLine(), id, chat1.getChatId(), messageId);
         messageHandler.sendMessage(message);
 
 
@@ -50,8 +59,21 @@ public class MainService {
         }
     }
 
-    public static void getAllMessages(UUID chatId){
+    public static List<String> getAllMessages(String chatId) throws FileNotFoundException {
+        List<String> messagesList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\ihor\\IdeaProjects\\Chats\\src\\Chats.txt"))){
+            String line;
+            while ((line = reader.readLine()) != null){
+                if (line.contains(chatId)) {
+                    messagesList.add(line);
+                    System.out.println(line);
+                }
+            }
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return messagesList;
     }
 
     public void addMessage(){

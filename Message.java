@@ -1,9 +1,8 @@
-import java.util.Scanner;
+
 import java.util.UUID;
 
 public class Message {
 
-    Scanner scanner = new Scanner(System.in);
     UUID chatId;
     String textMessage;
     UUID senderId;
@@ -18,12 +17,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "textMessage='" + textMessage + '\'' +
-                ", senderId=" + senderId +
-                ", chatId=" + chatId +
-                ", messageId=" + messageId +
-                '}';
+        return "textMessage " + textMessage +  " senderId " + senderId + " chatId " + chatId + " messageId " + messageId;
     }
 
     public String getTextMessage() {
