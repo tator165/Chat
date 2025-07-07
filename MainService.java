@@ -42,10 +42,6 @@ public class MainService {
 //        String name = user1.userRegInfo.iterator().next().getName();;
 //        System.gc();
 
-        Chat chat1 = new Chat();
-
-
-
     }
 
 
@@ -56,7 +52,7 @@ public class MainService {
         int choice = scanner.nextInt();
         switch (choice){
             case  1 : getAllChats(loggedInUser.getId()); chooseAction(loggedInUser); break;
-            case  2 : getAllMessages(); chooseAction(loggedInUser); break;
+            case  2 : getAllMessages(loggedInUser); chooseAction(loggedInUser); break;
             case  3 : createChat(loggedInUser.getId()); chooseAction(loggedInUser); break;
             case  4 :
                 System.out.println("Enter message text:");
@@ -96,36 +92,32 @@ public class MainService {
         }
     }
 
-    public static UUID createChat(UUID userId){
+    public static void createChat(UUID userId){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt", true))) {
             UUID generatedChat = UUID.randomUUID();
             writer.write(generatedChat + " userId: " + userId + "\n");
-            return generatedChat;
         } catch (IOException e) {
             throw new RuntimeException(e);
 
         }
     }
 
-    public static List<String> getAllMessages() {
+    public static void getAllMessages(User logedUser) {
         List<String> messagesList = new ArrayList<>();
-        System.out.println("Enter chatId: ");
-        Scanner scanner = new Scanner(System.in);
-        String enteredId;
-        enteredId = scanner.nextLine();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
-            String line;
-            while ((line = reader.readLine()) != null){
-                if (line.contains(enteredId)) {
-                    messagesList.add(line);
-                    System.out.println(line);
+        if (logedUser.getId().toString().equals(DataService.findUser(logedUser.getId()).toString())){
+            try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
+                String line;
+                while ((line = reader.readLine()) != null){
+                    if (line.contains(logedUser.getId().toString())) {
+                        messagesList.add(line);
+                        System.out.println(line);
+                    }
                 }
-            }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return messagesList;
     }
 
     public static void loadUsersFromFile() {

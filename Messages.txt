@@ -1,0 +1,3 @@
+[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8]
+[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 2da1e430-cb1c-47a4-a222-705f9d2fffb6]
+[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 2da1e430-cb1c-47a4-a222-705f9d2fffb6, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId fe72133e-9881-4c90-8c73-2267523a2ce7]

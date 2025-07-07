@@ -39,6 +39,15 @@ public class DataService {
         return null;
     }
 
+    static User findUser(UUID userId) {
+        for (User requestedUser : userRegInfo){
+            if (userId.toString().equals(requestedUser.toString())){
+                return requestedUser;
+            }
+        }
+        return null;
+    }
+
 
 
 
