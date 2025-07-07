@@ -34,6 +34,8 @@ public class MainService {
         } else System.out.println("try again");
 
 
+        chooseAction(loggedInUser);
+
 
 //        UUID id = user1.userRegInfo.iterator().next().getId();
 //        UUID password = user1.userRegInfo.iterator().next().getPassword();
@@ -41,37 +43,29 @@ public class MainService {
 //        System.gc();
 
         Chat chat1 = new Chat();
-        UUID chatId = null;
-        System.out.println("Create chat or use existing chat? y or ///");
-        String answer = scanner.nextLine();
-        if (answer.equals("y")){
-            chatId = chat1.generateChatId();
-            System.out.println("New chat created with ID: " + chatId);
-        }else {
-            System.out.println("eee: ");
-        }
 
-        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4(Не работает)");
-        String choice = scanner.next();
-
-        switch (choice){
-            case "1" : getAllChats(loggedInUser.getId());
-            case "2" : System.out.println("Enter chatId: ");
-                answer = scanner.nextLine();
-                getAllMessages(answer);
-            case "3" : createChat();
-            case "4" : Message message = new Message(scanner.nextLine(), loggedInUser.getId(), chatId, UUID.randomUUID());
-                DataService.sendMessage(message);
-        }
-
-//        DataService messageHandler = new DataService();
-//        UUID messageId = UUID.randomUUID();
-//        Message message = new Message(scanner.nextLine(), id, chat1.getChatId(), messageId);
-//        messageHandler.sendMessage(message);
 
 
     }
 
+
+    public static void chooseAction(User loggedInUser){
+        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        switch (choice){
+            case  1 : getAllChats(loggedInUser.getId()); break;
+            case  2 : getAllMessages(); break;
+            case  3 : createChat(); break;
+            case  4 :
+                System.out.println("Enter message text:");
+                String text = scanner.nextLine();
+                System.out.println("Enter chatID text:");
+                String idText = scanner.nextLine();
+                DataService.sendMessage(new Message(text, loggedInUser.getId(), DataService.findChatId(UUID.fromString(idText)), UUID.randomUUID()));
+                break;
+        }
+    }
     public static User login(String name, String passwordStr) {
         UUID password;
         try {
@@ -101,20 +95,26 @@ public class MainService {
     }
 
     public static UUID createChat(){
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt", true))) {
+            UUID generatedChat = UUID.randomUUID();
+            writer.write(generatedChat.toString());
+            return generatedChat;
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
-        UUID generatedChat = UUID.randomUUID();
-        return generatedChat;
     }
 
-    public static List<String> getAllMessages(String chatId) {
+    public static List<String> getAllMessages() {
         List<String> messagesList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\Chats.txt"))){
+        System.out.println("Enter chatId: ");
+        Scanner scanner = new Scanner(System.in);
+        String enteredId;
+        enteredId = scanner.nextLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
             String line;
             while ((line = reader.readLine()) != null){
-                if (line.contains(chatId)) {
+                if (line.contains(enteredId)) {
                     messagesList.add(line);
                     System.out.println(line);
                 }

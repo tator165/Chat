@@ -1,14 +1,13 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class DataService {
 
     static List<Message> messages = new ArrayList<>();
     static Set<User> userRegInfo = new LinkedHashSet<>();
+    static Set<User> chatsIds = new LinkedHashSet<>();
 
-    public static void sendMessage(Message message){
+    static void sendMessage(Message message){
         messages.add(message);
         System.out.println(messages);
 
@@ -18,6 +17,29 @@ public class DataService {
             throw new RuntimeException(e);
         }
     }
+
+    static UUID findChatId(UUID requestedId) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    UUID parsedId = UUID.fromString(line.trim());
+                    if (parsedId.equals(requestedId)) {
+                        System.out.println("Chat ID found: " + requestedId);
+                        return parsedId;
+                    }
+                } catch (IllegalArgumentException e) {
+
+                }
+            }
+            System.out.println("Chat ID not found.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
 
