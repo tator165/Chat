@@ -9,12 +9,10 @@ public class MainService {
 
         User loggedInUser = null;
 
-
-
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("log or reg?: ");
-        if(scanner.nextLine().equals("log")){
+        String response = scanner.nextLine();
+        if(response.equals("log")){
 
             System.out.println("Enter name, password");
             String name = scanner.nextLine();
@@ -22,9 +20,18 @@ public class MainService {
             loadUsersFromFile();
             loggedInUser = login(name,passwordString);
 
-        } else if(scanner.nextLine().equals("reg")){
-            User.registration();
-        }
+        } else if(response.equals("reg")){
+
+            DataService.registration();
+
+            System.out.println("Enter name, password");
+            String name = scanner.nextLine();
+            String passwordString = scanner.nextLine();
+            loadUsersFromFile();
+            loggedInUser = login(name,passwordString);
+
+
+        } else System.out.println("try again");
 
 
 
@@ -34,18 +41,27 @@ public class MainService {
 //        System.gc();
 
         Chat chat1 = new Chat();
-        System.out.println("Create chat or use existing chat? ");
+        UUID newChatId = null;
+        System.out.println("Create chat or use existing chat? y or ///");
         String answer = scanner.nextLine();
         if (answer.equals("y")){
-            chat1.generateChatId();
+            newChatId = chat1.generateChatId(); 
+            System.out.println("New chat created with ID: " + newChatId);
         }else {
-            System.out.println("Enter chatId: ");
-            answer = scanner.nextLine();
-            getAllMessages(answer);
+            System.out.println("eee: ");
         }
-        Message message = new Message("Hello", loggedInUser.getId(), UUID.fromString(answer), UUID.randomUUID());
-        DataService.sendMessage(message);
 
+        System.out.println("Choose action: getAllChats = 1, writeMessage = 2, getAllMessages = 3");
+        String choice = scanner.next();
+
+        switch (choice){
+            case "1" : getAllChats(loggedInUser.getId());
+            case "2" : Message message = new Message(scanner.nextLine(), loggedInUser.getId(), newChatId, UUID.randomUUID());
+                DataService.sendMessage(message);
+            case "3" : System.out.println("Enter chatId: ");
+                answer = scanner.nextLine();
+                getAllMessages(answer);
+        }
 
 //        DataService messageHandler = new DataService();
 //        UUID messageId = UUID.randomUUID();
@@ -64,7 +80,7 @@ public class MainService {
             return null;
         }
 
-        for (User u : User.userRegInfo) {
+        for (User u : DataService.userRegInfo) {
             if (u.getName().equals(name) && u.getPassword().equals(password)) {
                 System.out.println("OK");
                 return new User(u.getName(), u.getPassword(), u.getId());
@@ -75,8 +91,8 @@ public class MainService {
         return null;
     }
 
-    public static void getAllChats(User user, UUID userId){
-        for(User idInfo : user.userRegInfo){
+    public static void getAllChats(UUID userId){
+        for(User idInfo : DataService.userRegInfo){
             if(userId.equals(idInfo.getId())){
                 System.out.println("OK");
             }
@@ -110,11 +126,10 @@ public class MainService {
                         String name = parts[0];
                         UUID password = UUID.fromString(parts[1]);
                         UUID id = UUID.fromString(parts[2]);
-                        User.userRegInfo.add(new User(name, password, id));
+                        DataService.userRegInfo.add(new User(name, password, id));
                     }
                 }
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 }
