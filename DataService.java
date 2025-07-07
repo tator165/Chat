@@ -12,7 +12,7 @@ public class DataService {
         messages.add(message);
         System.out.println(messages);
 
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Chats.txt", true))) {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Messages.txt", true))) {
             writer.write(messages.toString() + "\n");
         }catch (IOException e) {
             throw new RuntimeException(e);

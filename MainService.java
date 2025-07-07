@@ -41,26 +41,27 @@ public class MainService {
 //        System.gc();
 
         Chat chat1 = new Chat();
-        UUID newChatId = null;
+        UUID chatId = null;
         System.out.println("Create chat or use existing chat? y or ///");
         String answer = scanner.nextLine();
         if (answer.equals("y")){
-            newChatId = chat1.generateChatId(); 
-            System.out.println("New chat created with ID: " + newChatId);
+            chatId = chat1.generateChatId();
+            System.out.println("New chat created with ID: " + chatId);
         }else {
             System.out.println("eee: ");
         }
 
-        System.out.println("Choose action: getAllChats = 1, writeMessage = 2, getAllMessages = 3");
+        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4(Не работает)");
         String choice = scanner.next();
 
         switch (choice){
             case "1" : getAllChats(loggedInUser.getId());
-            case "2" : Message message = new Message(scanner.nextLine(), loggedInUser.getId(), newChatId, UUID.randomUUID());
-                DataService.sendMessage(message);
-            case "3" : System.out.println("Enter chatId: ");
+            case "2" : System.out.println("Enter chatId: ");
                 answer = scanner.nextLine();
                 getAllMessages(answer);
+            case "3" : createChat();
+            case "4" : Message message = new Message(scanner.nextLine(), loggedInUser.getId(), chatId, UUID.randomUUID());
+                DataService.sendMessage(message);
         }
 
 //        DataService messageHandler = new DataService();
@@ -97,6 +98,15 @@ public class MainService {
                 System.out.println("OK");
             }
         }
+    }
+
+    public static UUID createChat(){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt"))) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        UUID generatedChat = UUID.randomUUID();
+        return generatedChat;
     }
 
     public static List<String> getAllMessages(String chatId) {
