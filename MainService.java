@@ -51,18 +51,20 @@ public class MainService {
 
     public static void chooseAction(User loggedInUser){
         System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4");
+
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         switch (choice){
-            case  1 : getAllChats(loggedInUser.getId()); break;
-            case  2 : getAllMessages(); break;
-            case  3 : createChat(); break;
+            case  1 : getAllChats(loggedInUser.getId()); chooseAction(loggedInUser); break;
+            case  2 : getAllMessages(); chooseAction(loggedInUser); break;
+            case  3 : createChat(loggedInUser.getId()); chooseAction(loggedInUser); break;
             case  4 :
                 System.out.println("Enter message text:");
                 String text = scanner.nextLine();
                 System.out.println("Enter chatID text:");
                 String idText = scanner.nextLine();
                 DataService.sendMessage(new Message(text, loggedInUser.getId(), DataService.findChatId(UUID.fromString(idText)), UUID.randomUUID()));
+                chooseAction(loggedInUser);
                 break;
         }
     }
@@ -94,10 +96,10 @@ public class MainService {
         }
     }
 
-    public static UUID createChat(){
+    public static UUID createChat(UUID userId){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt", true))) {
             UUID generatedChat = UUID.randomUUID();
-            writer.write(generatedChat.toString());
+            writer.write(generatedChat + " userId: " + userId + "\n");
             return generatedChat;
         } catch (IOException e) {
             throw new RuntimeException(e);
