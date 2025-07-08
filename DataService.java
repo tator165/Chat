@@ -5,6 +5,7 @@ public class DataService {
 
     static List<Message> messages = new ArrayList<>();
     static Set<User> userRegInfo = new LinkedHashSet<>();
+
     static Set<User> chatsIds = new LinkedHashSet<>();
 
     static void sendMessage(Message message){
@@ -22,8 +23,12 @@ public class DataService {
         try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
+
+                String[] parts = line.split(" ");
+                if (parts.length == 0) continue;
+
                 try {
-                    UUID parsedId = UUID.fromString(line.trim());
+                    UUID parsedId = UUID.fromString(parts[0]);
                     if (parsedId.equals(requestedId)) {
                         System.out.println("Chat ID found: " + requestedId);
                         return parsedId;
@@ -41,7 +46,7 @@ public class DataService {
 
     static User findUser(UUID userId) {
         for (User requestedUser : userRegInfo){
-            if (userId.toString().equals(requestedUser.toString())){
+            if (requestedUser.getId().equals(userId)){
                 return requestedUser;
             }
         }
@@ -49,6 +54,20 @@ public class DataService {
     }
 
 
+    static boolean checkAccess(UUID requestedUserId) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains(requestedUserId.toString())) {
+                    System.out.println("User found: " + requestedUserId);
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 
 
 

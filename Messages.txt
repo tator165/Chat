@@ -1,3 +1,2 @@
-[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8]
-[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 2da1e430-cb1c-47a4-a222-705f9d2fffb6]
-[textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 0b55a6a8-6a81-4113-8879-ef4c728b46f8, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId 2da1e430-cb1c-47a4-a222-705f9d2fffb6, textMessage  senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId null messageId fe72133e-9881-4c90-8c73-2267523a2ce7]
+[textMessage hi world senderId 66babcd7-03cb-4af7-9561-c075dbaa5847 chatId abf8c465-26d2-48b4-a075-c0fab954af03 messageId a2de377c-2663-4a29-bfd4-2967586d418a]
+[textMessage hello all senderId 87e1608d-0e0c-4212-b877-e7eaaf2624f7 chatId abf8c465-26d2-48b4-a075-c0fab954af03 messageId 13192661-7260-4ba5-bc25-825a06c46af8]
