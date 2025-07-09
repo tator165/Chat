@@ -19,14 +19,14 @@ public class MainService {
 
 
     public static void chooseAction(User loggedInUser){
-        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5");
+        System.out.println("Choose action: getAllChats = 1(do not work), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         scanner.nextLine();
         switch (choice){
             case  1 : getAllChats(loggedInUser.getId()); chooseAction(loggedInUser); break;
-            case  2 : getAllMessages(loggedInUser); chooseAction(loggedInUser); break;
+            case  2 : DataService.getAllMessages(loggedInUser); chooseAction(loggedInUser); break;
             case  3 : createChat(loggedInUser.getId()); chooseAction(loggedInUser); break;
             case  4 :
                 System.out.println("Enter message text:");
@@ -124,23 +124,7 @@ public class MainService {
         }
     }
 
-    public static void getAllMessages(User logedUser) {
-        List<String> messagesList = new ArrayList<>();
-        if (logedUser.getId().equals(DataService.findUser(logedUser.getId()).getId())){
-            try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
-                String line;
-                while ((line = reader.readLine()) != null){
-                    if (line.contains(logedUser.getId().toString())) {
-                        messagesList.add(line);
-                        System.out.println(line);
-                    }
-                }
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     public static void loadUsersFromFile() {
         try (Scanner fileScanner = new Scanner(new File("src\\Users.txt"))) {

@@ -8,6 +8,7 @@ public class DataService {
 
     static Set<User> chatsIds = new LinkedHashSet<>();
 
+    //add message to List and write to file
     static void sendMessage(Message message){
         messages.add(message);
         System.out.println(messages);
@@ -19,10 +20,13 @@ public class DataService {
         }
     }
 
+    //check user and userToAdd and reject or add to file
+    //check if they are already added and add to file
     static void addUserToChat(User allowedUser, UUID chatId, UUID userToAdd) {
 
-        boolean isAuthorized = userRegInfo.stream().anyMatch(user -> user.getId().equals(allowedUser.getId()));
-        if (!isAuthorized) return;
+        boolean isAuthorizedUser = userRegInfo.stream().anyMatch(user -> user.getId().equals(allowedUser.getId()));
+        boolean isAuthorizedUserToAdd = userRegInfo.stream().anyMatch(user -> user.getId().equals(userToAdd));
+        if (!isAuthorizedUser || !isAuthorizedUserToAdd) return;
 
         File file = new File("src\\ChatsId.txt");
         List<String> updatedLines = new ArrayList<>();
@@ -41,18 +45,14 @@ public class DataService {
                 updatedLines.add(line);
             }
 
-        } catch (IOException e) {}
+        } catch (IOException _) {}
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String updatedLine : updatedLines) {
                 writer.write(updatedLine);
                 writer.newLine();
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при записи файла", e);
-        }
-
-        System.out.println("Пользователь " + userToAdd + " добавлен в чат " + chatId);
+        } catch (IOException _) {}
     }
 
 
@@ -81,6 +81,7 @@ public class DataService {
         return null;
     }
 
+    //iterate over List and return user
     static User findUser(UUID userId) {
         for (User requestedUser : userRegInfo){
             if (requestedUser.getId().equals(userId)){
@@ -106,8 +107,6 @@ public class DataService {
         return false;
     }
 
-
-
     public static void registration() throws IOException {
         System.out.print("Enter name: ");
         Scanner scan = new Scanner(System.in);
@@ -127,5 +126,37 @@ public class DataService {
         }
 
         System.out.println("User registered: " + newUser);
+    }
+
+    public static void getAllMessages(User logedUser) {
+        //List<String> messagesList = new ArrayList<>();
+        File file = new File("src\\ChatsId.txt");
+        List<String> updatedLines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                updatedLines.add(line);
+            }
+
+        } catch (IOException e) {}
+
+
+        if (logedUser.getId().equals(DataService.findUser(logedUser.getId()).getId()) ){
+            try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
+                String line;
+                while ((line = reader.readLine()) != null){
+                    if (line.contains(logedUser.getId().toString())) {
+                        //messagesList.add(line);
+                        System.out.println(line);
+                    }
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
