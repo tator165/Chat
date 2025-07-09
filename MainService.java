@@ -19,7 +19,7 @@ public class MainService {
 
 
     public static void chooseAction(User loggedInUser){
-        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4");
+        System.out.println("Choose action: getAllChats = 1(Неправильно работает), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
@@ -43,7 +43,14 @@ public class MainService {
                 else {
                     System.out.println("Access denied"); chooseAction(loggedInUser); break;
                 }
-
+            case 5 :
+                System.out.println("Write user`s id to add");
+                UUID userToAdd = UUID.fromString(scanner.nextLine());
+                System.out.println("Enter chat ID to add");
+                UUID chatToAddUser = UUID.fromString(scanner.nextLine());
+                DataService.addUserToChat(loggedInUser, chatToAddUser,userToAdd);
+                chooseAction(loggedInUser);
+                break;
         }
     }
     public static User login(String name, String passwordStr) {

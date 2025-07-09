@@ -19,6 +19,43 @@ public class DataService {
         }
     }
 
+    static void addUserToChat(User allowedUser, UUID chatId, UUID userToAdd) {
+
+        boolean isAuthorized = userRegInfo.stream().anyMatch(user -> user.getId().equals(allowedUser.getId()));
+        if (!isAuthorized) return;
+
+        File file = new File("src\\ChatsId.txt");
+        List<String> updatedLines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(chatId.toString())) {
+
+                    if (!line.contains(userToAdd.toString())) {
+                        line = line + " " + userToAdd;
+                    }
+                }
+                updatedLines.add(line);
+            }
+
+        } catch (IOException e) {}
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (String updatedLine : updatedLines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при записи файла", e);
+        }
+
+        System.out.println("Пользователь " + userToAdd + " добавлен в чат " + chatId);
+    }
+
+
     static UUID findChatId(UUID requestedId) {
         try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))) {
             String line;
