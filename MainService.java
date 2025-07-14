@@ -18,8 +18,8 @@ public class MainService {
     }
 
 
-    public static void chooseAction(User loggedInUser){
-        System.out.println("Choose action: getAllChats = 1(do not work), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5");
+    public static void chooseAction(User loggedInUser) throws FileNotFoundException {
+        System.out.println("Choose action: getAllChats = 1(do not work), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5, getAllMessagesFromChat = 6");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
@@ -51,6 +51,10 @@ public class MainService {
                 DataService.addUserToChat(loggedInUser, chatToAddUser,userToAdd);
                 chooseAction(loggedInUser);
                 break;
+            case 6 :
+                System.out.println("Enter chat id: ");
+                UUID chatId = UUID.fromString(scanner.nextLine());
+                DataService.getAllChatMessages(chatId);
         }
     }
     public static User login(String name, String passwordStr) {
@@ -140,6 +144,6 @@ public class MainService {
                     }
                 }
             }
-        } catch (IOException e) {}
+        } catch (IOException _) {}
     }
 }

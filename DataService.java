@@ -70,7 +70,7 @@ public class DataService {
                         System.out.println("Chat ID found: " + requestedId);
                         return parsedId;
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException _) {
 
                 }
             }
@@ -128,7 +128,7 @@ public class DataService {
         System.out.println("User registered: " + newUser);
     }
 
-    public static void getAllMessages(User logedUser) {
+    public static void getAllMessages(User logedUser) throws FileNotFoundException {
         //List<String> messagesList = new ArrayList<>();
         File file = new File("src\\ChatsId.txt");
         List<String> updatedLines = new ArrayList<>();
@@ -150,13 +150,39 @@ public class DataService {
                 while ((line = reader.readLine()) != null){
                     if (line.contains(logedUser.getId().toString())) {
                         //messagesList.add(line);
-                        System.out.println(line);
+                        System.out.println("Your message: " + line);
                     }
                 }
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+        }
+    }
+
+    public static void getAllChatMessages(UUID chatId){
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\Chats.txt"))){
+            String line;
+
+            while ((line = reader.readLine()) != null){
+                if (line.contains(chatId.toString())){
+                    try (BufferedReader messageReader = new BufferedReader(new FileReader("src\\Messages.txt"))){
+                        String messageLine;
+                        while ((messageLine = messageReader.readLine()) != null){
+                            if (line.contains(chatId.toString())) {
+                                //messagesList.add(line);
+                                System.out.println("Chat messages: " + messageLine);
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
