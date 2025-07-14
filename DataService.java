@@ -161,17 +161,17 @@ public class DataService {
         }
     }
 
-    public static void getAllChatMessages(UUID chatId){
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\Chats.txt"))){
+    public static void getAllChatMessages(UUID chatId, UUID loggedUser){
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))){
             String line;
 
             while ((line = reader.readLine()) != null){
-                if (line.contains(chatId.toString())){
+                if (line.contains(chatId.toString()) && line.contains(loggedUser.toString())){
                     try (BufferedReader messageReader = new BufferedReader(new FileReader("src\\Messages.txt"))){
                         String messageLine;
                         while ((messageLine = messageReader.readLine()) != null){
-                            if (line.contains(chatId.toString())) {
-                                //messagesList.add(line);
+                            if (messageLine.contains(chatId.toString())) {
+                                //messagesList.add(messageLine);
                                 System.out.println("Chat messages: " + messageLine);
                             }
                         }

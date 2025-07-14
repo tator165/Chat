@@ -14,7 +14,7 @@ public class MainService {
 //        String name = user1.userRegInfo.iterator().next().getName();;
 //        System.gc();
 
-        entryPoint();
+        _entryPoint();
     }
 
 
@@ -37,12 +37,12 @@ public class MainService {
                 System.out.println("DEBUG: idText = '" + idText + "'");
                 if (DataService.checkAccess(loggedInUser.getId())){
                     DataService.sendMessage(new Message(text, loggedInUser.getId(), DataService.findChatId(UUID.fromString(idText)), UUID.randomUUID()));
-                    chooseAction(loggedInUser);
-                    break;
                 }
                 else {
-                    System.out.println("Access denied"); chooseAction(loggedInUser); break;
+                    System.out.println("Access denied");
                 }
+                chooseAction(loggedInUser);
+                break;
             case 5 :
                 System.out.println("Write user`s id to add");
                 UUID userToAdd = UUID.fromString(scanner.nextLine());
@@ -54,7 +54,7 @@ public class MainService {
             case 6 :
                 System.out.println("Enter chat id: ");
                 UUID chatId = UUID.fromString(scanner.nextLine());
-                DataService.getAllChatMessages(chatId);
+                DataService.getAllChatMessages(chatId, loggedInUser.getId());
         }
     }
     public static User login(String name, String passwordStr) {
@@ -85,7 +85,7 @@ public class MainService {
         }
     }
 
-    private static void entryPoint() throws IOException {
+    private static void _entryPoint() throws IOException {
         User loggedInUser;
 
         Scanner scanner = new Scanner(System.in);
@@ -100,7 +100,7 @@ public class MainService {
             loggedInUser = login(name,passwordString);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
-            } else entryPoint();
+            } else _entryPoint();
         } else if(response.equals("reg")){
 
             DataService.registration();
@@ -112,10 +112,10 @@ public class MainService {
             loggedInUser = login(name,passwordString);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
-            } else entryPoint();
+            } else _entryPoint();
         } else {
             System.out.println("try again");
-            entryPoint();
+            _entryPoint();
         }
     }
     public static void createChat(UUID userId){
