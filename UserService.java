@@ -1,8 +1,9 @@
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class UserService {
 
-    static Set<User> userRegInfo = new LinkedHashSet<>();
+    static Map<UUID, User> userRegInfo = new HashMap<>();
 
 }

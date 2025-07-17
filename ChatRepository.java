@@ -39,10 +39,9 @@ public class ChatRepository {
     }
 
     public static void getAllChats(UUID userId){
-        for(User idInfo : UserService.userRegInfo){
-            if(userId.equals(idInfo.getId())){
-                System.out.println("OK");
-            }
+        if(UserService.userRegInfo.containsKey(userId)){
+            System.out.println("Ok");
+            User us = UserService.userRegInfo.get(userId);
         }
     }
 }

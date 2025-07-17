@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class MessageRepository {
 
-
     //add message to List and write to file
     static void sendMessage(Message message){
         ChatService.messages.add(message);
@@ -50,7 +49,6 @@ public class MessageRepository {
 
         }
     }
-
 
     public static void getAllChatMessages(UUID chatId, UUID loggedUser){
         try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))){

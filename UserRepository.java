@@ -9,8 +9,8 @@ public class UserRepository {
 
     static void addUserToChat(User allowedUser, UUID chatId, UUID userToAdd) {
 
-        boolean isAuthorizedUser = UserService.userRegInfo.stream().anyMatch(user -> user.getId().equals(allowedUser.getId()));
-        boolean isAuthorizedUserToAdd = UserService.userRegInfo.stream().anyMatch(user -> user.getId().equals(userToAdd));
+        boolean isAuthorizedUser = UserService.userRegInfo.containsKey(allowedUser.getId());
+        boolean isAuthorizedUserToAdd = UserService.userRegInfo.values().stream().anyMatch(user -> user.getId().equals(userToAdd));
         if (!isAuthorizedUser || !isAuthorizedUserToAdd) return;
 
         File file = new File("src\\ChatsId.txt");
@@ -42,11 +42,7 @@ public class UserRepository {
 
     //iterate over List and return user
     static User findUser(UUID userId) {
-        for (User requestedUser : UserService.userRegInfo){
-            if (requestedUser.getId().equals(userId)){
-                return requestedUser;
-            }
-        }
+        if(UserService.userRegInfo.containsKey(userId)) return UserService.userRegInfo.get(userId);
         return null;
     }
 
@@ -75,7 +71,7 @@ public class UserRepository {
                         String name = parts[0];
                         UUID password = UUID.fromString(parts[1]);
                         UUID id = UUID.fromString(parts[2]);
-                        UserService.userRegInfo.add(new User(name, password, id));
+                        UserService.userRegInfo.put(id, new User(name, password, id));
                     }
                 }
             }

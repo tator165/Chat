@@ -6,14 +6,6 @@ import java.util.UUID;
 
 public class MainService {
     public static void main(String[] args) throws IOException {
-
-
-
-//        UUID id = user1.userRegInfo.iterator().next().getId();
-//        UUID password = user1.userRegInfo.iterator().next().getPassword();
-//        String name = user1.userRegInfo.iterator().next().getName();;
-//        System.gc();
-
         _entryPoint();
     }
 
@@ -71,7 +63,7 @@ public class MainService {
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
             UserRepository.loadUsersFromFile();
-            loggedInUser = DataService.login(name,passwordString);
+            loggedInUser = DataService.login(name,passwordString,userID);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
             } else _entryPoint();
@@ -83,7 +75,7 @@ public class MainService {
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
             UserRepository.loadUsersFromFile();
-            loggedInUser = DataService.login(name,passwordString);
+            loggedInUser = DataService.login(name,passwordString,userID);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
             } else _entryPoint();
@@ -92,6 +84,4 @@ public class MainService {
             _entryPoint();
         }
     }
-
-
 }

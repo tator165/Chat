@@ -25,7 +25,7 @@ public class DataService {
         System.out.println("Generated id: " + id);
 
         User newUser = new User(name, password, id);
-        UserService.userRegInfo.add(newUser);
+        UserService.userRegInfo.put(id,newUser);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Users.txt", true))) {
             writer.write(newUser + "\n");
@@ -34,7 +34,7 @@ public class DataService {
         System.out.println("User registered: " + newUser);
     }
 
-    public static User login(String name, String passwordStr) {
+    public static User login(String name, String passwordStr, UUID userId) {
         UUID password;
         try {
             password = UUID.fromString(passwordStr.trim());
@@ -43,10 +43,10 @@ public class DataService {
             return null;
         }
 
-        for (User u : UserService.userRegInfo) {
-            if (u.getName().equals(name) && u.getPassword().equals(password)) {
-                System.out.println("OK");
-                return new User(u.getName(), u.getPassword(), u.getId());
+        if (UserService.userRegInfo.containsKey(userId)) {
+            User user = UserService.userRegInfo.get(userId);
+            if (user.getPassword().equals(UUID.fromString(passwordStr))) {
+                return new User(name, password, userId);
             }
         }
 
