@@ -25,9 +25,9 @@ public class MainService {
         int choice = scanner.nextInt();
         scanner.nextLine();
         switch (choice){
-            case  1 : getAllChats(loggedInUser.getId()); chooseAction(loggedInUser); break;
-            case  2 : DataService.getAllMessages(loggedInUser); chooseAction(loggedInUser); break;
-            case  3 : createChat(loggedInUser.getId()); chooseAction(loggedInUser); break;
+            case  1 : ChatRepository.getAllChats(loggedInUser.getId()); chooseAction(loggedInUser); break;
+            case  2 : MessageRepository.getAllMessages(loggedInUser); chooseAction(loggedInUser); break;
+            case  3 : ChatRepository.createChat(loggedInUser.getId()); chooseAction(loggedInUser); break;
             case  4 :
                 System.out.println("Enter message text:");
                 String text = scanner.nextLine();
@@ -35,8 +35,8 @@ public class MainService {
                 System.out.println("Enter chatID text:");
                 String idText = scanner.nextLine();
                 System.out.println("DEBUG: idText = '" + idText + "'");
-                if (DataService.checkAccess(loggedInUser.getId())){
-                    DataService.sendMessage(new Message(text, loggedInUser.getId(), DataService.findChatId(UUID.fromString(idText)), UUID.randomUUID()));
+                if (UserRepository.checkAccess(loggedInUser.getId())){
+                    MessageRepository.sendMessage(new Message(text, loggedInUser.getId(), ChatRepository.findChatId(UUID.fromString(idText)), UUID.randomUUID()));
                 }
                 else {
                     System.out.println("Access denied");
@@ -48,42 +48,16 @@ public class MainService {
                 UUID userToAdd = UUID.fromString(scanner.nextLine());
                 System.out.println("Enter chat ID to add");
                 UUID chatToAddUser = UUID.fromString(scanner.nextLine());
-                DataService.addUserToChat(loggedInUser, chatToAddUser,userToAdd);
+                UserRepository.addUserToChat(loggedInUser, chatToAddUser,userToAdd);
                 chooseAction(loggedInUser);
                 break;
             case 6 :
                 System.out.println("Enter chat id: ");
                 UUID chatId = UUID.fromString(scanner.nextLine());
-                DataService.getAllChatMessages(chatId, loggedInUser.getId());
+                MessageRepository.getAllChatMessages(chatId, loggedInUser.getId());
         }
     }
-    public static User login(String name, String passwordStr) {
-        UUID password;
-        try {
-            password = UUID.fromString(passwordStr.trim());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid password format");
-            return null;
-        }
 
-        for (User u : DataService.userRegInfo) {
-            if (u.getName().equals(name) && u.getPassword().equals(password)) {
-                System.out.println("OK");
-                return new User(u.getName(), u.getPassword(), u.getId());
-            }
-        }
-
-        System.out.println("Wrong name or password");
-        return null;
-    }
-
-    public static void getAllChats(UUID userId){
-        for(User idInfo : DataService.userRegInfo){
-            if(userId.equals(idInfo.getId())){
-                System.out.println("OK");
-            }
-        }
-    }
 
     private static void _entryPoint() throws IOException {
         User loggedInUser;
@@ -96,8 +70,8 @@ public class MainService {
             System.out.println("Enter name, password");
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
-            loadUsersFromFile();
-            loggedInUser = login(name,passwordString);
+            UserRepository.loadUsersFromFile();
+            loggedInUser = DataService.login(name,passwordString);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
             } else _entryPoint();
@@ -108,8 +82,8 @@ public class MainService {
             System.out.println("Enter name, password");
             String name = scanner.nextLine();
             String passwordString = scanner.nextLine();
-            loadUsersFromFile();
-            loggedInUser = login(name,passwordString);
+            UserRepository.loadUsersFromFile();
+            loggedInUser = DataService.login(name,passwordString);
             if (loggedInUser != null) {
                 chooseAction(loggedInUser);
             } else _entryPoint();
@@ -118,32 +92,6 @@ public class MainService {
             _entryPoint();
         }
     }
-    public static void createChat(UUID userId){
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\ChatsId.txt", true))) {
-            UUID generatedChat = UUID.randomUUID();
-            writer.write(generatedChat + " userId: " + userId + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-
-        }
-    }
 
 
-
-    public static void loadUsersFromFile() {
-        try (Scanner fileScanner = new Scanner(new File("src\\Users.txt"))) {
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine().trim();
-                if (!line.isEmpty()) {
-                    String[] parts = line.split(" ");
-                    if (parts.length == 3) {
-                        String name = parts[0];
-                        UUID password = UUID.fromString(parts[1]);
-                        UUID id = UUID.fromString(parts[2]);
-                        DataService.userRegInfo.add(new User(name, password, id));
-                    }
-                }
-            }
-        } catch (IOException _) {}
-    }
 }
