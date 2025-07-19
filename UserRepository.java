@@ -14,6 +14,7 @@ public class UserRepository {
         if (!isAuthorizedUser || !isAuthorizedUserToAdd) return;
 
         File file = new File("src\\ChatsId.txt");
+
         List<String> updatedLines = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

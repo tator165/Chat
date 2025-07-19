@@ -6,7 +6,7 @@ public class DataService {
 
 
 
-    static Set<User> chatsIds = new LinkedHashSet<>();
+    //static Set<User> chatsIds = new LinkedHashSet<>();
 
 
     //check user and userToAdd and reject or add to file

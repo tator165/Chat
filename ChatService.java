@@ -1,8 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ChatService {
 
-    static List<Message> messages = new ArrayList<>();
+    static Map<UUID, Message> messages = new HashMap<>();
 
 }

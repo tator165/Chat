@@ -7,7 +7,7 @@ public class MessageRepository {
 
     //add message to List and write to file
     static void sendMessage(Message message){
-        ChatService.messages.add(message);
+        ChatService.messages.put(message.getMessageId(), message);
         System.out.println(ChatService.messages);
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Messages.txt", true))) {
@@ -17,7 +17,7 @@ public class MessageRepository {
         }
     }
 
-    public static void getAllMessages(User logedUser) throws FileNotFoundException {
+    public static void getAllMessages(User logedUser){
         //List<String> messagesList = new ArrayList<>();
         File file = new File("src\\ChatsId.txt");
         List<String> updatedLines = new ArrayList<>();
@@ -30,7 +30,7 @@ public class MessageRepository {
                 updatedLines.add(line);
             }
 
-        } catch (IOException e) {}
+        } catch (IOException _) {}
 
 
         if (logedUser.getId().equals(UserRepository.findUser(logedUser.getId()).getId()) ){

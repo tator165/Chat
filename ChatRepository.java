@@ -22,8 +22,8 @@ public class ChatRepository {
                 }
             }
             System.out.println("Chat ID not found.");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return null;
     }

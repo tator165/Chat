@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -10,7 +8,7 @@ public class MainService {
     }
 
 
-    public static void chooseAction(User loggedInUser) throws FileNotFoundException {
+    public static void chooseAction(User loggedInUser){
         System.out.println("Choose action: getAllChats = 1(do not work), getAllMessages = 2, createChat = 3, writeMessageToChat = 4, addUserToChat = 5, getAllMessagesFromChat = 6");
 
         Scanner scanner = new Scanner(System.in);
@@ -57,6 +55,7 @@ public class MainService {
         Scanner scanner = new Scanner(System.in);
         System.out.println("log or reg?: ");
         String response = scanner.nextLine();
+        UUID userID = UUID.randomUUID(); //remove
         if(response.equals("log")){
 
             System.out.println("Enter name, password");
