@@ -27,7 +27,7 @@ public class DataService {
         User newUser = new User(name, password, id);
         UserService.userRegInfo.put(id,newUser);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Users.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\files\\Users.txt", true))) {
             writer.write(newUser + "\n");
         }
 

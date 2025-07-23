@@ -7,7 +7,7 @@ public class Server {
     private PrintWriter out;
     private BufferedReader in;
 
-    public void start(int port) throws IOException {
+    public void _start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         clientSocket = serverSocket.accept();
         out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -44,7 +44,7 @@ public class Server {
         Thread serverThread = new Thread(() -> {
 
             try {
-                server.start(6666);
+                server._start(6666);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

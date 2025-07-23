@@ -13,7 +13,7 @@ public class UserRepository {
         boolean isAuthorizedUserToAdd = UserService.userRegInfo.values().stream().anyMatch(user -> user.getId().equals(userToAdd));
         if (!isAuthorizedUser || !isAuthorizedUserToAdd) return;
 
-        File file = new File("src\\ChatsId.txt");
+        File file = new File("src\\files\\ChatsId.txt");
 
         List<String> updatedLines = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class UserRepository {
     }
 
     static boolean checkAccess(UUID requestedUserId) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\ChatsId.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains(requestedUserId.toString())) {
@@ -63,7 +63,7 @@ public class UserRepository {
     }
 
     public static void loadUsersFromFile() {
-        try (Scanner fileScanner = new Scanner(new File("src\\Users.txt"))) {
+        try (Scanner fileScanner = new Scanner(new File("src\\files\\Users.txt"))) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
                 if (!line.isEmpty()) {

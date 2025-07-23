@@ -10,7 +10,7 @@ public class MessageRepository {
         ChatService.messages.put(message.getMessageId(), message);
         System.out.println(ChatService.messages);
 
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Messages.txt", true))) {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\files\\Messages.txt", true))) {
             writer.write(ChatService.messages.toString() + "\n");
         }catch (IOException e) {
             throw new RuntimeException(e);
@@ -19,7 +19,7 @@ public class MessageRepository {
 
     public static void getAllMessages(User logedUser){
         //List<String> messagesList = new ArrayList<>();
-        File file = new File("src\\ChatsId.txt");
+        File file = new File("src\\files\\ChatsId.txt");
         List<String> updatedLines = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -34,7 +34,7 @@ public class MessageRepository {
 
 
         if (logedUser.getId().equals(UserRepository.findUser(logedUser.getId()).getId()) ){
-            try (BufferedReader reader = new BufferedReader(new FileReader("src\\Messages.txt"))){
+            try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\Messages.txt"))){
                 String line;
                 while ((line = reader.readLine()) != null){
                     if (line.contains(logedUser.getId().toString())) {
@@ -51,12 +51,12 @@ public class MessageRepository {
     }
 
     public static void getAllChatMessages(UUID chatId, UUID loggedUser){
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\ChatsId.txt"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\ChatsId.txt"))){
             String line;
 
             while ((line = reader.readLine()) != null){
                 if (line.contains(chatId.toString()) && line.contains(loggedUser.toString())){
-                    try (BufferedReader messageReader = new BufferedReader(new FileReader("src\\Messages.txt"))){
+                    try (BufferedReader messageReader = new BufferedReader(new FileReader("src\\files\\Messages.txt"))){
                         String messageLine;
                         while ((messageLine = messageReader.readLine()) != null){
                             if (messageLine.contains(chatId.toString())) {
