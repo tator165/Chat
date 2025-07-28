@@ -1,81 +1,70 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.nio.file.*;
+import java.util.*;
 
 public class UserRepository {
 
+    private static final String USER_FILE = "src/files/Users.txt";
+    private static final String CHATS_FILE = "src/files/ChatsId.txt";
 
-    static void addUserToChat(User allowedUser, UUID chatId, UUID userToAdd) {
+    public static void addUserToChat(User allowedUser, UUID chatId, UUID userToAdd) {
+        if (!UserService.userRegInfo.containsKey(allowedUser.getId())) return;
+        if (UserService.userRegInfo.values().stream().noneMatch(u -> u.getId().equals(userToAdd))) return;
 
-        boolean isAuthorizedUser = UserService.userRegInfo.containsKey(allowedUser.getId());
-        boolean isAuthorizedUserToAdd = UserService.userRegInfo.values().stream().anyMatch(user -> user.getId().equals(userToAdd));
-        if (!isAuthorizedUser || !isAuthorizedUserToAdd) return;
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(CHATS_FILE));
+            List<String> updatedLines = new ArrayList<>();
 
-        File file = new File("src\\files\\ChatsId.txt");
-
-        List<String> updatedLines = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
+            for (String line : lines) {
                 if (line.startsWith(chatId.toString())) {
-
                     if (!line.contains(userToAdd.toString())) {
-                        line = line + " " + userToAdd;
+                        line += " " + userToAdd;
                     }
                 }
                 updatedLines.add(line);
             }
 
-        } catch (IOException _) {}
+            Files.write(Paths.get(CHATS_FILE), updatedLines);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (String updatedLine : updatedLines) {
-                writer.write(updatedLine);
-                writer.newLine();
-            }
-        } catch (IOException _) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    //iterate over List and return user
-    static User findUser(UUID userId) {
-        if(UserService.userRegInfo.containsKey(userId)) return UserService.userRegInfo.get(userId);
-        return null;
+    public static User findUser(UUID userId) {
+        return UserService.userRegInfo.get(userId);
     }
 
-    static boolean checkAccess(UUID requestedUserId) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\ChatsId.txt"))) {
+    public static boolean checkAccess(UUID requestedUserId) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CHATS_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.contains(requestedUserId.toString())) {
-                    System.out.println("User found: " + requestedUserId);
-                    return true;
-                }
+                if (line.contains(requestedUserId.toString())) return true;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return false;
     }
 
     public static void loadUsersFromFile() {
-        try (Scanner fileScanner = new Scanner(new File("src\\files\\Users.txt"))) {
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine().trim();
-                if (!line.isEmpty()) {
-                    String[] parts = line.split(" ");
-                    if (parts.length == 3) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.trim().split(" ");
+                if (parts.length == 3) {
+                    try {
                         String name = parts[0];
                         UUID password = UUID.fromString(parts[1]);
                         UUID id = UUID.fromString(parts[2]);
                         UserService.userRegInfo.put(id, new User(name, password, id));
+                    } catch (IllegalArgumentException ignored) {
+                        System.out.println("Skipping invalid user line: " + line);
                     }
                 }
             }
-        } catch (IOException _) {}
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load users from file", e);
+        }
     }
 }
