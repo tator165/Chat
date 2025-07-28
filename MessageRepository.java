@@ -1,73 +1,54 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class MessageRepository {
 
-    //add message to List and write to file
-    static void sendMessage(Message message){
-        ChatService.messages.put(message.getMessageId(), message);
-        System.out.println(ChatService.messages);
+    private static final String MESSAGE_FILE_PATH = "src/files/Messages.txt";
+    private static final String CHATS_FILE_PATH = "src/files/ChatsId.txt";
 
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("src\\files\\Messages.txt", true))) {
-            writer.write(ChatService.messages.toString() + "\n");
-        }catch (IOException e) {
+    public static void sendMessage(Message message){
+        ChatService.messages.put(message.getMessageId(), message);
+        String line = message.getMessageId() + " " + message.getChatId() + " " + message.getSenderId() + " " + message.getTextMessage();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(MESSAGE_FILE_PATH, true))) {
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void getAllMessages(User logedUser){
-        //List<String> messagesList = new ArrayList<>();
-        File file = new File("src\\files\\ChatsId.txt");
-        List<String> updatedLines = new ArrayList<>();
+    public static void getAllMessages(User loggedUser){
+        UUID userId = loggedUser.getId();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(MESSAGE_FILE_PATH))) {
             String line;
-
-            while ((line = reader.readLine()) != null) {
-                updatedLines.add(line);
-            }
-
-        } catch (IOException _) {}
-
-
-        if (logedUser.getId().equals(UserRepository.findUser(logedUser.getId()).getId()) ){
-            try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\Messages.txt"))){
-                String line;
-                while ((line = reader.readLine()) != null){
-                    if (line.contains(logedUser.getId().toString())) {
-                        //messagesList.add(line);
-                        System.out.println("Your message: " + line);
-                    }
+            while ((line = reader.readLine()) != null){
+                if (line.contains(userId.toString())) {
+                    System.out.println("Your message: " + line);
                 }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void getAllChatMessages(UUID chatId, UUID loggedUser){
-        try (BufferedReader reader = new BufferedReader(new FileReader("src\\files\\ChatsId.txt"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(CHATS_FILE_PATH))) {
             String line;
-
             while ((line = reader.readLine()) != null){
                 if (line.contains(chatId.toString()) && line.contains(loggedUser.toString())){
-                    try (BufferedReader messageReader = new BufferedReader(new FileReader("src\\files\\Messages.txt"))){
+                    try (BufferedReader messageReader = new BufferedReader(new FileReader(MESSAGE_FILE_PATH))) {
                         String messageLine;
                         while ((messageLine = messageReader.readLine()) != null){
                             if (messageLine.contains(chatId.toString())) {
-                                //messagesList.add(messageLine);
                                 System.out.println("Chat messages: " + messageLine);
                             }
                         }
-
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    return;
                 }
             }
         } catch (IOException e) {
