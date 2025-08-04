@@ -1,0 +1,5 @@
+[textMessage hello senderId d757f4ec-c506-4168-b36c-abf68d31ca3d chatId 1e8f3a63-2204-4b1b-a70f-f1860699394b messageId 0ea7df42-aac3-4a8f-b76f-acb63b11e00b]
+[textMessage now senderId 25f597ab-ba95-4603-9dcc-7f2b93c654a5 chatId 23f7a126-2407-43f1-b91e-5f8aa3df2c20 messageId 83144393-2703-4eac-b83d-3b2985dae973]
+[textMessage hello senderId 25f597ab-ba95-4603-9dcc-7f2b93c654a5 chatId 2ccc11a1-a324-4209-8013-8f3847a1aac9 messageId b8842a06-b3ac-44a1-a314-50c12a4ea5f4]
+[textMessage Hello i am kate senderId d3580282-cf28-4869-9e90-4032bebbaa0d chatId cf9898e0-b626-40fb-a9ee-1c86805f8e01 messageId c5b599bf-3695-4801-80fe-603dc33ce953]
+[textMessage hello kate senderId d757f4ec-c506-4168-b36c-abf68d31ca3d chatId cf9898e0-b626-40fb-a9ee-1c86805f8e01 messageId 30bb544a-3538-40d2-b0a8-aeccd4acc346]
